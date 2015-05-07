@@ -1,2 +1,2 @@
 # Xml2Markdown
-Microsoft .Net XML documentation to Markdown
+Microsoft .Net XML documentation to Markdown conversion.
