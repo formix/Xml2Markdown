@@ -1,0 +1,304 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MegaCityOne</name>
+    </assembly>
+    <members>
+        <member name="T:MegaCityOne.AbstractJudge">
+            <summary>
+            Basic implementation of a Judge.
+            </summary>
+        </member>
+        <member name="T:MegaCityOne.Judge">
+            <summary>
+            Defining a security engine basic interface.
+            </summary>
+        </member>
+        <member name="M:MegaCityOne.Judge.Advise(System.String,System.Object[])">
+            <summary>
+            The Judge gives an adivce regarding a law taking in account some 
+            optional arguments for the current Principal.
+            </summary>
+            <param name="law">The law to be advised.</param>
+            <param name="arguments">Any system state that could help the 
+            Judge to give a relevant advice regarding the law in question.</param>
+            <returns>True if the advised law is respected for the current Principal, 
+            given optional arguments. False otherwise.</returns>
+        </member>
+        <member name="M:MegaCityOne.Judge.Enforce(System.String,System.Object[])">
+            <summary>
+            The Judge is in a situation where he have to give a Life or Death 
+            sentence regarding a law, given optional arguments provided, for 
+            the current Principal.
+            </summary>
+            <param name="law">The law to be enforced.</param>
+            <param name="arguments">Any system state that could help the 
+            Judge to give a relevant sentence regarding the law in question.</param>
+            <exception cref="T:MegaCityOne.LawgiverException">
+            Inherited from <see cref="T:System.Security.SecurityException"/>. 
+            This exceptions is thrown at the face of current Principal if he 
+            is breaking the given law.</exception>
+        </member>
+        <member name="P:MegaCityOne.Judge.Principal">
+            <summary>
+            The principal assigned to the current Judge.
+            </summary>
+        </member>
+        <member name="M:MegaCityOne.AbstractJudge.Advise(System.String,System.Object[])">
+            <summary>
+            The advise method to be implemented by specialized Judges.
+            </summary>
+            <param name="law">The name of a Law to be interpreted by the 
+            Judge.</param>
+            <param name="arguments">Optional arguments given to the Judge to 
+            interpret a Law properly.</param>
+            <returns>True if the Law is respected, False otherwise.</returns>
+        </member>
+        <member name="M:MegaCityOne.AbstractJudge.Enforce(System.String,System.Object[])">
+            <summary>
+            Standard Law enforcement inplementation. This implementation will 
+            advise the given Law with the provided optional arguments. If the
+            Law advises falsy, throws a LawgiverException. If it advises 
+            truthy then this method does nothing.
+            </summary>
+            <param name="law">The name of a Law to be interpreted by the 
+            Judge.</param>
+            <param name="arguments">Optional arguments given to the Judge to 
+            interpret a Law properly.</param>
+            <exception cref="T:MegaCityOne.LawgiverException">Thrown when the 
+            given Law advise falsy with the optional arguments.</exception>
+        </member>
+        <member name="P:MegaCityOne.AbstractJudge.Principal">
+            <summary>
+            Gets or sets the principal currently under scrutiny of this Judge.
+            After the Judge instanciation, the scrutinized principal 
+            corresponds to the principal found in 
+            <see cref="P:System.Threading.Thread.CurrentPrincipal"/>. This is 
+            the Judge main target. During the course of action, you can bring 
+            another IPrincipal under scrutiny by setting this value. To take 
+            the Judge attention back to the main target, sets this property 
+            back to null.
+            </summary>
+            <remarks>Setting a value to this property do not override 
+            <see cref="P:System.Threading.Thread.CurrentPrincipal"/>.</remarks>
+        </member>
+        <member name="T:MegaCityOne.JusticeDepartment">
+            <summary>
+            A JusticeDepartment instance must have a default constructor.
+            </summary>
+        </member>
+        <member name="M:MegaCityOne.JusticeDepartment.GetLaws">
+            <summary>
+            Returns a dictionary containing Laws to be advised by JudgeDredd.
+            </summary>
+            <returns>A Law dictionary.</returns>
+        </member>
+        <member name="T:MegaCityOne.JudgeDredd">
+            <summary>
+            JudgeDredd is a Judge that uses Laws defined as lambda expressions.
+            </summary>
+        </member>
+        <member name="M:MegaCityOne.JudgeDredd.#ctor">
+            <summary>
+            Instanciates JudgeDredd.
+            </summary>
+        </member>
+        <member name="M:MegaCityOne.JudgeDredd.Load(System.Collections.Generic.IDictionary{System.String,MegaCityOne.Law})">
+            <summary>
+            Loads a new set of Laws in Dredd's helmet computer. The New Laws 
+            do not invalidate existing ones systematically. Instead, they are
+            added to Dredd's embarked artificial intelligence. Note that a new 
+            Law having the same name as a pre-existing Law will override it.
+            </summary>
+            <param name="newLaws">A set of new laws to add to Dredd's embarked 
+            AI</param>
+        </member>
+        <member name="M:MegaCityOne.JudgeDredd.Load(MegaCityOne.JusticeDepartment)">
+            <summary>
+            Loads a set of laws obtained from the given JusticeDepartment.
+            </summary>
+            <param name="justiceDepartment">The JusticeDepartment containing 
+            the laws to embark in Dredd's AI.</param>
+        </member>
+        <member name="M:MegaCityOne.JudgeDredd.Load(System.Reflection.Assembly)">
+            <summary>
+            Seeks all JusticeDeparment from the library and loads the Laws 
+            they contains in Dredd's AI.
+            </summary>
+            <param name="library">The library to search for JusticeDepartment
+            </param>
+        </member>
+        <member name="M:MegaCityOne.JudgeDredd.Load(System.String)">
+            <summary>
+            Search in the given path a library that may contains one or more 
+            JusticeDepartment. If found, adds the laws obtained to Dredd's AI.
+            </summary>
+            <param name="path">The file path to the library containing the 
+            JusticeDepartment.</param>
+        </member>
+        <member name="M:MegaCityOne.JudgeDredd.Load">
+            <summary>
+            Search for a JusticeDepartment implementation in the calling 
+            library.
+            </summary>
+        </member>
+        <member name="M:MegaCityOne.JudgeDredd.Advise(System.String,System.Object[])">
+            <summary>
+            Dredd checks with it's AI and tells if the given law is repsected 
+            or not, given the provided arguments, for the current Principal.
+            </summary>
+            <param name="law">The Law to be advised</param>
+            <param name="arguments">Optional arguments to be evaluated.</param>
+            <returns></returns>
+        </member>
+        <member name="P:MegaCityOne.JudgeDredd.Laws">
+            <summary>
+            Laws contained in Dredd's embarked artificial intelligence.
+            </summary>
+        </member>
+        <member name="T:MegaCityOne.Law">
+            <summary>
+            Delegate used ot define a Law useable by JudgeDredd.
+            </summary>
+            <param name="principal">The targetted principal for the given Law
+            </param>
+            <param name="arguments">An array of arguments given to the Law. Can 
+            be an empty array and content depends on the Given Law 
+            implementation.</param>
+            <returns>True if the Law is respected, false otherwise.</returns>
+        </member>
+        <member name="T:MegaCityOne.MessageEventArgs">
+            <summary>
+            An event argument containing a message sent by the Javascript 
+            function "message".
+            </summary>
+        </member>
+        <member name="M:MegaCityOne.MessageEventArgs.#ctor">
+            <summary>
+            Instanciate a MessageEventArgs.
+            </summary>
+        </member>
+        <member name="M:MegaCityOne.MessageEventArgs.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of JsMessageEventArgs.
+            </summary>
+            <param name="text">The message text received from the internal 
+            Javascript engine.</param>
+        </member>
+        <member name="M:MegaCityOne.MessageEventArgs.ToString">
+            <summary>
+            Returns a string representation of the current object.
+            </summary>
+            <returns>a string representation of the current object.</returns>
+        </member>
+        <member name="P:MegaCityOne.MessageEventArgs.Text">
+            <summary>
+            Gets the message content.
+            </summary>
+        </member>
+        <member name="T:MegaCityOne.MessageDelegate">
+            <summary>
+            Delegate for JsMessage passing.
+            </summary>
+            <param name="source">The source object of the message.</param>
+            <param name="e">The JsMessageEventArgs instance</param>
+        </member>
+        <member name="T:MegaCityOne.JudgeAnderson">
+            <summary>
+            JudgeAnderson runs an internal JavaScript interpreter to execute laws
+            that have been defined in a Javacript file on the server.
+            </summary>
+        </member>
+        <member name="M:MegaCityOne.JudgeAnderson.#ctor">
+            <summary>
+            Initializes a new instance of the javascript law engine.
+            </summary>
+        </member>
+        <member name="M:MegaCityOne.JudgeAnderson.Load(System.IO.FileInfo)">
+            <summary>
+            Loads a law script from the specified file.
+            </summary>
+            <param name="file">The file containing the javascript law 
+            to be loaded in the current principal.</param>
+        </member>
+        <member name="M:MegaCityOne.JudgeAnderson.Load(System.IO.TextReader)">
+            <summary>
+            Loads a JavaScript law file definition.
+            </summary>
+            <param name="reader">The reader containing the JavaScript code.
+            </param>
+        </member>
+        <member name="M:MegaCityOne.JudgeAnderson.Load(System.String)">
+            <summary>
+            Loads the law script received.
+            </summary>
+            <param name="script">The javascript laws applied to the current 
+            principal.</param>
+        </member>
+        <member name="M:MegaCityOne.JudgeAnderson.Advise(System.String,System.Object[])">
+            <summary>
+            Gives an advice based on a law defined in a JavaScript file.
+            See <see cref="M:MegaCityOne.Judge.Advise(System.String,System.Object[])"/> for more details.
+            </summary>
+            <param name="law"></param>
+            <param name="arguments"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MegaCityOne.JudgeAnderson.AddObject(System.String,System.Object)">
+            <summary>
+            Adds an object to the JavaScript engine.
+            </summary>
+            <param name="name">How the object shall be called in the script.</param>
+            <param name="target">The object reference to be added.</param>
+        </member>
+        <member name="M:MegaCityOne.JudgeAnderson.OnMessage(MegaCityOne.MessageEventArgs)">
+            <summary>
+            Raise the Message event.
+            </summary>
+            <param name="e">The event arguments</param>
+        </member>
+        <member name="E:MegaCityOne.JudgeAnderson.Message">
+            <summary>
+            Event launched when the "message(text)" function is called from 
+            the JavaScript.
+            </summary>
+        </member>
+        <member name="P:MegaCityOne.JudgeAnderson.IsInitialized">
+            <summary>
+            Tells if JudgeAnderson internal script engine is ready to process
+            Laws. Returns true after a Law file have been loaded. Returns 
+            false otherwise.
+            </summary>
+        </member>
+        <member name="T:MegaCityOne.LawgiverException">
+            <summary>
+            Exception launched by a Judge while Enforcing a Law.
+            </summary>
+        </member>
+        <member name="M:MegaCityOne.LawgiverException.#ctor">
+            <summary>
+            Instanciate a basic LawgivedException.
+            </summary>
+        </member>
+        <member name="M:MegaCityOne.LawgiverException.#ctor(System.String)">
+            <summary>
+            Instanciate a LawgiverException with the given message.
+            </summary>
+            <param name="message">The exception message.</param>
+        </member>
+        <member name="M:MegaCityOne.LawgiverException.#ctor(System.String,System.Exception)">
+            <summary>
+            Instanciate a Lawgiver exception with the given message and inner Exception.
+            </summary>
+            <param name="message"></param>
+            <param name="inner"></param>
+        </member>
+        <member name="M:MegaCityOne.LawgiverException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Instanciate a LawgiverException in a deserialization context.
+            </summary>
+            <param name="info">The serialization information.</param>
+            <param name="context">The streaming context</param>
+        </member>
+    </members>
+</doc>
